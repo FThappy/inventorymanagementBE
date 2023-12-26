@@ -21,7 +21,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**"};
+    private static final String[] WHITE_LIST_URL = {"/api/auth/**"};
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthFilter;
@@ -37,9 +37,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers(GET,"/admin/products").permitAll()
-                                .requestMatchers(GET,"/store").permitAll()
-                                .requestMatchers(GET,"/category").permitAll()
+//                                .requestMatchers(GET,"/admin/products").permitAll()
+//                                .requestMatchers(GET,"/store").permitAll()
+//                                .requestMatchers(GET,"/category").permitAll()
 //                                .requestMatchers("/admin/products").hasAnyRole(ADMIN.name(), MANAGER.name())
 //                                .requestMatchers(POST, "/admin/products").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
 //                                .requestMatchers(PUT, "/admin/products/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
@@ -52,14 +52,15 @@ public class SecurityConfiguration {
 //                                .requestMatchers(POST, "/category").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
 //                                .requestMatchers(PUT, "/category/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
 //                                .requestMatchers(DELETE,"/category/**").hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
-                                .anyRequest()
-                        .authenticated()
+//                                .anyRequest()
+                                .anyRequest().permitAll()
+//                        .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
-                        logout.logoutUrl("/api/v1/auth/logout")
+                        logout.logoutUrl("/api/auth/logout")
                                 .addLogoutHandler(logoutHandler)
                                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
                 )
