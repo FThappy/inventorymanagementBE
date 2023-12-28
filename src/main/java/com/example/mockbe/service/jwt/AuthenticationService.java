@@ -8,6 +8,8 @@ import com.example.mockbe.repository.UserRepository;
 import com.example.mockbe.request.AuthenticationRequest;
 import com.example.mockbe.request.RegisterRequest;
 import com.example.mockbe.response.AuthenticationResponse;
+import com.example.mockbe.response.ResponeLogin;
+import com.example.mockbe.response.ResponeRegister;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -40,26 +44,28 @@ public class AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public ResponeRegister register(RegisterRequest request) {
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .isBlocked(false)
                 .role(request.getRole())
                 .build();
         var savedUser = repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
+//        var jwtToken = jwtService.generateToken(user);
+//        var refreshToken = jwtService.generateRefreshToken(user);
+//        saveUserToken(savedUser, jwtToken);
+        return ResponeRegister.builder()
+//                .accessToken(jwtToken)
+//                .refreshToken(refreshToken)
+                .info("Đăng ký thành công").code("0")
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public ResponeLogin authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -72,7 +78,11 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
+        Map<String, String> userMap = convertUserToMap(user);
+        return ResponeLogin.builder()
+                .info("Đăng nhập thành công")
+                .code("0")
+                .user(userMap)
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -126,5 +136,12 @@ public class AuthenticationService {
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
+    }
+    private Map<String, String> convertUserToMap(User user) {
+        Map<String, String> userMap = new HashMap<>();
+        userMap.put("UserName", user.getUsername());
+        userMap.put("Role", user.getRole().toString());
+        userMap.put("email", user.getEmail());
+        return userMap;
     }
 }
