@@ -14,7 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static org.springframework.http.HttpMethod.*;
+import static com.example.mockbe.model.user.Role.ADMIN;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -37,7 +38,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-//                                .requestMatchers(GET,"/admin/products").permitAll()
+                                .requestMatchers(POST,"/api/distributor").permitAll()
 //                                .requestMatchers(GET,"/store").permitAll()
 //                                .requestMatchers(GET,"/category").permitAll()
 //                                .requestMatchers("/admin/products").hasAnyRole(ADMIN.name(), MANAGER.name())
@@ -52,9 +53,8 @@ public class SecurityConfiguration {
 //                                .requestMatchers(POST, "/category").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
 //                                .requestMatchers(PUT, "/category/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
 //                                .requestMatchers(DELETE,"/category/**").hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
-//                                .anyRequest()
-                                .anyRequest().permitAll()
-//                        .authenticated()
+                                .anyRequest()
+                        .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
