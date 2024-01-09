@@ -26,8 +26,8 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService service;
+
+    private final AuthenticationService service;
 
     @PostMapping("/register")
     public ResponseEntity<ResponeRegister> register(

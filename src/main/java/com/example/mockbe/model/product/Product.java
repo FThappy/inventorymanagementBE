@@ -13,8 +13,9 @@ public class Product {
     private Integer id;
     private String productCode;
     private String productName;
-    private Integer quantity;
+    private Integer totalQuantity;
     private String unit;
+    private Integer importPrice;
 
     @JsonIgnore
     @ManyToOne

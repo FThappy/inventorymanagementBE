@@ -7,7 +7,11 @@ import java.util.Optional;
 import com.example.mockbe.model.user.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@Component
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 
   @Query(value = """
