@@ -17,15 +17,15 @@ public class Product {
     private String unit;
     private Integer importPrice;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private Distributor distributor;
-
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToMany( mappedBy = "product")
     private List<ProductVariant> productVariantsList;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "distributor_id", referencedColumnName = "id")
+    private Distributor distributor;
 
 }
