@@ -1,7 +1,7 @@
 package com.example.mockbe.model.product;
 import java.util.List;
 
-import com.example.mockbe.model.supplier.Supplier;
+import com.example.mockbe.model.distributor.Distributor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -13,18 +13,19 @@ public class Product {
     private Integer id;
     private String productCode;
     private String productName;
-    private Integer quantity;
+    private Integer totalQuantity;
     private String unit;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private Supplier supplier;
+    private Integer importPrice;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToMany( mappedBy = "product")
     private List<ProductVariant> productVariantsList;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "distributor_id", referencedColumnName = "id")
+    private Distributor distributor;
 
 }

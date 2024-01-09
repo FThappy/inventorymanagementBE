@@ -1,5 +1,6 @@
 package com.example.mockbe.model.distributor;
 
+import com.example.mockbe.model.product.Product;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "distributor")
@@ -56,4 +58,7 @@ public class Distributor {
     private Date createAt;
     @Column (name = "update_at")
     private Date updateAt;
+
+    @OneToMany(mappedBy = "distributor")
+    private List<Product> productList;
 }
