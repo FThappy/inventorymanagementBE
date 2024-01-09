@@ -1,7 +1,7 @@
 package com.example.mockbe.model.product;
 import java.util.List;
 
-import com.example.mockbe.model.supplier.Supplier;
+import com.example.mockbe.model.distributor.Distributor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -18,8 +18,8 @@ public class Product {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
-    private Supplier supplier;
+    @JoinColumn(name = "id", referencedColumnName = "id")
+    private Distributor distributor;
 
     @Enumerated(EnumType.STRING)
     private Status status;
