@@ -2,6 +2,8 @@ package com.example.mockbe.model.product;
 
 import com.example.mockbe.model.distributor.Distributor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,16 +23,12 @@ public class Product {
     private Double weight;
     @Column(nullable = false)
     private String description;
-    private String image;
-    @Column(nullable = false)
-    private String category;
-    @Column(nullable = false)
-    private String unit;
-    private Integer inventory;
+    private JsonNode images;
     private String size;
     private String color;
     private String material;
     private Integer quantity;
+    private Integer quantitySold;
     private Double importPrice;
     private Double retailPrice;
     private Double wholesalePrice;
@@ -41,4 +39,13 @@ public class Product {
     @JoinColumn(name = "distributor_id", referencedColumnName = "id")
     private Distributor distributor;
 
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_category_id", referencedColumnName = "id")
+    private ProductCategory productCategory;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_brand_id", referencedColumnName = "id")
+    private ProductBrand productBrand;
 }

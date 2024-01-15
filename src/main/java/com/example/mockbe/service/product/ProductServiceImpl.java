@@ -37,8 +37,6 @@ public class ProductServiceImpl implements ProductService{
         productDto.setWeight(createProductRequest.getWeight());
         productDto.setDescription(createProductRequest.getDescription());
         productDto.setCategory(createProductRequest.getCategory());
-        productDto.setUnit(createProductRequest.getUnit());
-        productDto.setInventory(createProductRequest.getInventory());
         productDto.setSize(createProductRequest.getSize());
         productDto.setColor(createProductRequest.getColor());
         productDto.setMaterial(createProductRequest.getMaterial());

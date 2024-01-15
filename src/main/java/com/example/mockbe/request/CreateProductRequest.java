@@ -1,5 +1,10 @@
 package com.example.mockbe.request;
 
+import com.example.mockbe.model.product.Product;
+import com.example.mockbe.model.product.ProductBrand;
+import com.example.mockbe.model.product.ProductCategory;
+import com.fasterxml.jackson.databind.JsonNode;
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,16 +20,14 @@ public class CreateProductRequest {
     private Double weight;
     @NotEmpty(message = "Description is required")
     private String description;
-    private String image;
-    @NotEmpty(message = "Category is required")
-    private String category;
-    @NotEmpty(message = "Unit is required")
-    private String unit;
-    private Integer inventory;
+    private JsonNode images;
+    private ProductCategory productCategory;
+    private ProductBrand productBrand;
     private String size;
     private String color;
     private String material;
     private Integer quantity;
+    private Integer quantitySold;
     private Double importPrice;
     private Double retailPrice;
     private Double wholesalePrice;
