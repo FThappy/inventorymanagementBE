@@ -1,30 +1,31 @@
-package com.example.mockbe.model.product;
+package com.example.mockbe.dto;
 
 import com.example.mockbe.model.distributor.Distributor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@Entity
-@Table(name = "products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductDto {
     private Long id;
-    @Column(nullable = false, unique = true)
+    @NotEmpty(message = "Sku is required")
+    @NotBlank(message = "Sku is not blank")
     private String sku;
-    @Column(nullable = false)
+    @NotEmpty(message = "Product name is required")
     private String productName;
     private Double weight;
-    @Column(nullable = false)
+    @NotEmpty(message = "Description is required")
     private String description;
     private String image;
-    @Column(nullable = false)
+    @NotEmpty(message = "Category is required")
     private String category;
-    @Column(nullable = false)
+    @NotEmpty(message = "Unit is required")
     private String unit;
     private Integer inventory;
     private String size;
@@ -36,9 +37,5 @@ public class Product {
     private Double wholesalePrice;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "distributor_id", referencedColumnName = "id")
     private Distributor distributor;
-
 }
