@@ -2,12 +2,13 @@ package com.example.mockbe.model.product;
 
 import com.example.mockbe.model.distributor.Distributor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,7 +24,8 @@ public class Product {
     private Double weight;
     @Column(nullable = false)
     private String description;
-    private JsonNode images;
+    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
+    private List<Image> images;
     private String size;
     private String color;
     private String material;

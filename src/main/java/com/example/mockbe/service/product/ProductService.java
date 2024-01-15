@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductService {
-    ProductDto createProduct(CreateProductRequest createProductRequest, MultipartFile image);
+    ProductDto createProduct(CreateProductRequest createProductRequest, List<MultipartFile> images);
     Page<Product> getAllProducts(int page, int size);
     Page<Product> searchProducts(String searchText , String category, String unit, LocalDateTime createdDate, int page, int size);
 

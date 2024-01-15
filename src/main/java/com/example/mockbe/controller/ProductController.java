@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
@@ -21,8 +22,8 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping(value = "/create", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> createProduct(@RequestPart("ProductRequest") @Valid CreateProductRequest createProductRequest, @RequestPart("file") MultipartFile image){
-        ProductDto productDto = productService.createProduct(createProductRequest, image);
+    public ResponseEntity<?> createProduct(@RequestPart("ProductRequest") @Valid CreateProductRequest createProductRequest, @RequestPart("files") List<MultipartFile> images){
+        ProductDto productDto = productService.createProduct(createProductRequest, images);
         return new ResponseEntity<>(productDto, HttpStatus.CREATED);
     }
 

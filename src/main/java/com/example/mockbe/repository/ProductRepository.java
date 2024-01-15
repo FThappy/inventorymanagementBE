@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
     Page<Product> findAllBySkuOrProductNameContainsIgnoreCase(String sku, String productName, Pageable pageable);
-    Page<Product> findAllByCategoryContainsIgnoreCase(String category, Pageable withPage);
-    Page<Product> findAllByUnitContainsIgnoreCase(String unit, Pageable withPage);
+    Page<Product> findAllByProductCategoryContainsIgnoreCase(String category, Pageable withPage);
+    Page<Product> findAllByProductBrandContainsIgnoreCase(String unit, Pageable withPage);
     Page<Product> findAllByCreatedAt(LocalDateTime createdDate, Pageable withPage);
 
 }

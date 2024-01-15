@@ -1,6 +1,7 @@
 package com.example.mockbe.dto;
 
 import com.example.mockbe.model.distributor.Distributor;
+import com.example.mockbe.model.product.Image;
 import com.example.mockbe.model.product.Product;
 import com.example.mockbe.model.product.ProductBrand;
 import com.example.mockbe.model.product.ProductCategory;
@@ -13,6 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class ProductDto {
     private Double weight;
     @NotEmpty(message = "Description is required")
     private String description;
-    private JsonNode images;
+    private List<Image> images;
     @NotEmpty(message = "Category is required")
     private ProductCategory productCategory;
     private ProductBrand productBrand;
