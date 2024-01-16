@@ -17,6 +17,8 @@ public interface DistributorRepository extends JpaRepository<Distributor, Intege
         return findAll(pageable);
     }
 
+    Distributor findByNameContainsIgnoreCase(String name);
+
 
 
 }
