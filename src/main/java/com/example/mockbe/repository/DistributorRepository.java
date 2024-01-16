@@ -16,6 +16,7 @@ public interface DistributorRepository extends JpaRepository<Distributor, Intege
         Pageable pageable = PageRequest.of(page, 10);
         return findAll(pageable);
     }
+    Distributor findDistributorByDistributorCodeOrPhoneOrEmail(String code, String phone , String email);
 
     Distributor findByNameContainsIgnoreCase(String name);
 

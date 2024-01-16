@@ -1,5 +1,6 @@
 package com.example.mockbe.controller;
 
+import com.example.mockbe.dto.IdList;
 import com.example.mockbe.dto.ResDistributor;
 import com.example.mockbe.dto.Responese;
 import com.example.mockbe.model.distributor.Distributor;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -35,12 +38,16 @@ public class DistributorController {
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
         }
         try {
-            Distributor newDistributor = distributorService.createDistributor(distributor);
+            ResDistributor newDistributor = distributorService.createDistributor(distributor);
             if(newDistributor == null){
                 Responese res = new Responese("Thông tin này đã tồn tại vui lòng nhập lại", "1");
                 return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
             }
-            return ResponseEntity.status(HttpStatus.OK).body(newDistributor);
+            if(newDistributor.getCode() == "1"){
+                Responese res = new Responese("Nhà cung cấp bị trùng vui lòng nhập lại", "3");
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(newDistributor.getDistribution());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error post category: " + e.getMessage());
         }
@@ -141,6 +148,36 @@ public class DistributorController {
                 return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
             }
             Responese res = new Responese("Xóa sản phẩm thành công", "0");
+            return ResponseEntity.status(HttpStatus.OK).body(res);
+        }
+        catch (Exception e){
+            Responese res = new Responese("Error update distributors", "1");
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+        }
+    }
+
+    @PostMapping("/multi")
+    public ResponseEntity<?> deleteDistibutorMulti(@RequestBody List<Long> listId){
+        try{
+            for (Long id : listId) {
+                Distributor distributors=distributorService.getDistributorById(Math.toIntExact(id));
+                if(distributors == null){
+                    Responese res = new Responese("Không tồn tại nhà cung cấp với id  "+id, "4");
+                    return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+                }
+            }
+            for (Long id : listId) {
+            String code = distributorService.deleteDistributor(Math.toIntExact(id));
+            if(code == "4"){
+                Responese res = new Responese("Không tồn tại nhà cung cấp với id  "+id, "4");
+                return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+            }
+            if(code == "1"){
+                Responese res = new Responese("Error update distributors", "1");
+                return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+            }
+            }
+            Responese res = new Responese("Xóa tất cả sản phẩm thành công", "0");
             return ResponseEntity.status(HttpStatus.OK).body(res);
         }
         catch (Exception e){

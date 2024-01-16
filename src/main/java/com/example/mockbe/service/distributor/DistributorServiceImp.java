@@ -17,7 +17,13 @@ public class DistributorServiceImp implements DistributorService {
      @Autowired
     public DistributorRepository distributorRepository;
     @Override
-    public Distributor createDistributor(Distributor distributor) {
+    public ResDistributor createDistributor(Distributor distributor) {
+        Distributor existingDistributor = distributorRepository.findDistributorByDistributorCodeOrPhoneOrEmail(distributor.getDistributorCode(), distributor.getPhone(), distributor.getEmail());
+        if (existingDistributor != null){
+            ResDistributor resDistributor = new ResDistributor("1",null);
+            return resDistributor;
+        }
+
         try {
             Distributor newDistributor = new Distributor();
             newDistributor.setName(distributor.getName());
@@ -30,7 +36,8 @@ public class DistributorServiceImp implements DistributorService {
             newDistributor.setWeb(distributor.getWeb());
             newDistributor.setCreateAt(distributor.getCreateAt());
             newDistributor.setUpdateAt(distributor.getUpdateAt());
-            return distributorRepository.save(newDistributor);
+            ResDistributor resDistributor = new ResDistributor("0",distributorRepository.save(newDistributor));
+            return resDistributor;
 
         }
         catch (Exception e) {
