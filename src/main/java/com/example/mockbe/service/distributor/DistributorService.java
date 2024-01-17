@@ -15,6 +15,8 @@ public interface DistributorService {
 
     public Distributor getDistributorById(int id);
 
+    public Distributor getDistributorByCode(String code);
+
     public Page<Distributor> getPageDistributors(int page);
 
     public String deleteDistributor(int id);

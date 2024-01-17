@@ -13,6 +13,7 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long productId;
+    @Column(name = "product_id")
+    private String productId;
     private String url;
 }

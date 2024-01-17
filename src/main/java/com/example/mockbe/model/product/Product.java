@@ -1,6 +1,7 @@
 package com.example.mockbe.model.product;
 
 import com.example.mockbe.model.distributor.Distributor;
+import com.example.mockbe.model.distributor.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -17,37 +18,24 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true)
-    private String sku;
+    @Column(name = "product_id",nullable = false, unique = true)
+    private String productId;
     @Column(nullable = false)
     private String productName;
-    private Double weight;
     @Column(nullable = false)
     private String description;
-    @OneToMany(mappedBy = "productId", cascade = CascadeType.ALL)
+    @Column (name = "status", columnDefinition = "VARCHAR(255) DEFAULT 'available'")
+    @Enumerated(EnumType.STRING)
+    private Statuss status;
+    @OneToMany(targetEntity = Image.class,cascade = CascadeType.ALL)
+    @JoinColumn(name ="product_id",referencedColumnName = "product_id")
     private List<Image> images;
     private String size;
     private String color;
-    private String material;
     private Integer quantity;
     private Integer quantitySold;
-    private Double importPrice;
-    private Double retailPrice;
-    private Double wholesalePrice;
+    private Double cost;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "distributor_id", referencedColumnName = "id")
-    private Distributor distributor;
-
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_category_id", referencedColumnName = "id")
-    private ProductCategory productCategory;
-
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_brand_id", referencedColumnName = "id")
-    private ProductBrand productBrand;
+    private String distributor;
 }

@@ -119,4 +119,9 @@ public class DistributorServiceImp implements DistributorService {
             return "1";
         }
     }
+
+    @Override
+    public Distributor getDistributorByCode(String code) {
+        return distributorRepository.findByDistributorCode(code);
+    }
 }

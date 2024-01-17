@@ -20,6 +20,8 @@ public interface DistributorRepository extends JpaRepository<Distributor, Intege
 
     Distributor findByNameContainsIgnoreCase(String name);
 
+    Distributor findByDistributorCode(String code);
+
 
 
 }
