@@ -19,6 +19,7 @@ public class ProductDto1 {
     private String color;
     private String quantity;
     private String cost;
+    private String quantitySold;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String distributor_code;

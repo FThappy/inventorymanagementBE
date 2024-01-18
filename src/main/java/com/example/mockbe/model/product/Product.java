@@ -2,6 +2,7 @@ package com.example.mockbe.model.product;
 
 import com.example.mockbe.model.distributor.Distributor;
 import com.example.mockbe.model.distributor.Status;
+import com.example.mockbe.model.transcation.DetailTranscation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -30,6 +31,9 @@ public class Product {
     @OneToMany(targetEntity = Image.class,cascade = CascadeType.ALL)
     @JoinColumn(name ="product_id",referencedColumnName = "product_id")
     private List<Image> images;
+    @OneToMany(targetEntity = DetailTranscation.class,cascade = CascadeType.ALL)
+    @JoinColumn(name ="product_id",referencedColumnName = "product_id")
+    private List<DetailTranscation> detail;
     private String size;
     private String color;
     private Integer quantity;

@@ -6,6 +6,7 @@ import com.example.mockbe.dto.ResProduct;
 import com.example.mockbe.model.distributor.Distributor;
 import com.example.mockbe.model.product.Image;
 import com.example.mockbe.model.product.Product;
+import com.example.mockbe.model.product.Statuss;
 import com.example.mockbe.repository.DistributorRepository;
 import com.example.mockbe.repository.ImageProductRepository;
 import com.example.mockbe.repository.ProductsRepository;
@@ -38,7 +39,7 @@ public class ProductsServiceImp implements ProductsService {
             newProduct.setDescription(product.getDescription());
             newProduct.setColor(product.getColor());
             newProduct.setSize(product.getSize());
-            String quantityString = product.getCost();
+            String quantityString = product.getQuantity();
             Integer costInteger = Integer.parseInt(quantityString);
             newProduct.setQuantity(costInteger);
             String costString = product.getCost();
@@ -47,6 +48,7 @@ public class ProductsServiceImp implements ProductsService {
             newProduct.setDistributor(product.getDistributor_code());
             newProduct.setCreatedAt(LocalDateTime.now());
             newProduct.setUpdatedAt(LocalDateTime.now());
+            newProduct.setStatus(Statuss.available);
             ResProduct resProduct = new ResProduct("0",productsRepository.save(newProduct));
             return resProduct;
 
@@ -113,4 +115,47 @@ public class ProductsServiceImp implements ProductsService {
     public boolean exists(int id) {
         return imageProductRepository.existsById(id);
     }
-}
+
+    @Override
+    public String deleteProduct(String code) {
+        deleteProductImage(code);
+        productsRepository.deleteByProductId(code);
+        return "thành công";
+    }
+
+    @Override
+    public String deleteProductImage(String code) {
+        imageProductRepository.deleteByProductId(code);
+        return "thành công";
+    }
+    @Override
+    public ResProduct updateProduct(ProductDto1 product, String code) {
+        try {
+            Product newProduct = productsRepository.findByProductId(code);
+            newProduct.setProductName(product.getProductName());
+            newProduct.setDescription(product.getDescription());
+            newProduct.setColor(product.getColor());
+            newProduct.setSize(product.getSize());
+            String quantityString = product.getQuantity();
+            Integer costInteger = Integer.parseInt(quantityString);
+            newProduct.setQuantity(costInteger);
+            String costString = product.getCost();
+            Double costDouble = Double.parseDouble(costString);
+            newProduct.setCost(costDouble);
+            newProduct.setDistributor(product.getDistributor_code());
+            newProduct.setCreatedAt(LocalDateTime.now());
+            newProduct.setUpdatedAt(LocalDateTime.now());
+            String quantityStringSold = product.getQuantitySold();
+            Integer soldInteger = Integer.parseInt(quantityStringSold);
+            newProduct.setQuantitySold(soldInteger);
+            newProduct.setStatus(Statuss.available);
+            ResProduct resProduct = new ResProduct("0",productsRepository.save(newProduct));
+            return resProduct;
+
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+    }
+

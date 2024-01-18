@@ -15,4 +15,6 @@ public interface ProductsRepository extends JpaRepository<Product, Long> {
         return findAll(pageable);
     }
     Page<Product> findByDistributor(String supplierCode, Pageable pageable);
+
+    void deleteByProductId( String productId );
 }

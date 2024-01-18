@@ -168,4 +168,81 @@ public class ProductsController {
         }
 
     }
+    @PutMapping("/{code}")
+    public ResponseEntity<?> updateDistibutor (@PathVariable("code") String code,@ModelAttribute ProductDto product){
+        Product existingProduct = productsServiceImp.getProductByProductCode( code);
+
+        if(existingProduct == null){
+            Responese res = new Responese("Không tồn tại sản phẩm với mã" +  code, "2");
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
+        Distributor existingDistributor =  distributorService.getDistributorByCode(product.getDistributor_code());
+
+        if(existingDistributor == null){
+            Responese res = new Responese("Không tồn tại nhà cung cấp" + product.getDistributor_code(), "3");
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
+        if(product.getImageFiles() !=null) {
+            try {
+                List<MultipartFile> multipartFiles = product.getImageFiles();
+
+                if (multipartFiles != null && !multipartFiles.isEmpty()) {
+                    productsServiceImp.deleteProductImage(code);
+                    for (MultipartFile multipartFile : multipartFiles) {
+                        BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
+                        if (bi == null) {
+                            return new ResponseEntity<>("Image non valide!", HttpStatus.BAD_REQUEST);
+                        }
+
+                        Map result = cloudinaryService.upload(multipartFile, code);
+                        Image image = new Image();
+                        image.setUrl((String) result.get("url"));
+                        image.setProductId(code);
+                        productsServiceImp.saveImage(image);
+                    }
+                } else {
+                    return new ResponseEntity<>("No images found!", HttpStatus.BAD_REQUEST);
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error post category: " + e.getMessage());
+            }
+        }
+        try {
+            ProductDto1 dataSend = new ProductDto1();
+            dataSend.setProductName(product.getProductName());
+            dataSend.setDescription(product.getDescription());
+            dataSend.setSize(product.getSize());
+            dataSend.setCost(product.getCost());
+            dataSend.setColor(product.getColor());
+            dataSend.setDistributor_code(product.getDistributor_code());
+            dataSend.setQuantity(product.getQuantity());
+            dataSend.setQuantitySold(product.getQuantitySold());
+            ResProduct newProduct = productsServiceImp.updateProduct(dataSend, code);
+            List<Image> img = productsServiceImp.listImageByProductId(code);
+            Product dataProduct = productsServiceImp.getProductByProductCode(code);
+            dataProduct.setImages(img);
+            return ResponseEntity.status(HttpStatus.OK).body(dataProduct);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error post category: " + e.getMessage());
+        }
+
+    }
+    @DeleteMapping("/{code}")
+    public ResponseEntity deleteProduct(@PathVariable("code") String code){
+        Product existingProduct = productsServiceImp.getProductByProductCode( code);
+
+        if(existingProduct == null){
+            Responese res = new Responese("Không tồn tại sản phẩm với mã" +  code, "2");
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
+        try{
+           productsServiceImp.deleteProduct(code);
+            Responese res = new Responese("Xóa sản phẩm thành công", "0");
+            return ResponseEntity.status(HttpStatus.OK).body(res);
+        }
+        catch (Exception e){
+            Responese res = new Responese("Error update distributors", "1");
+            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+        }
+    }
 }

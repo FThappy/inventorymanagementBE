@@ -14,6 +14,9 @@ import java.util.Optional;
 public interface ProductsService {
 
     public ResProduct createProduct(ProductDto1 product);
+
+    public ResProduct updateProduct(ProductDto1 product, String code);
+
 //
 //    public ResDistributor updateDistributor(Distributor distributor, int id);
 
@@ -30,7 +33,9 @@ public interface ProductsService {
 //
 //    public Page<Distributor> getPageDistributors(int page);
 //
-//    public String deleteDistributor(int id);
+    public String deleteProduct(String code);
+
+    public String deleteProductImage(String code);
 //
 //    public ResDistributor updateDistributorStatus(Distributor distributor, int id);
 
