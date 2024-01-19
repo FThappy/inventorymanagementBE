@@ -30,7 +30,10 @@ public interface ProductsService {
 
     public Page<Product> getPageCode (int page, String code);
 
-//
+    public String browserProduct(long id,String status, String description);
+
+
+    //
 //    public Page<Distributor> getPageDistributors(int page);
 //
     public String deleteProduct(String code);

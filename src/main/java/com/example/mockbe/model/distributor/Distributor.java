@@ -52,6 +52,8 @@ public class Distributor {
     private String description;
     @Column (name = "payment")
     private String payment;
+    @Column (name = "payment_card")
+    private String paymentCard;
     @Column (name = "address")
     private String address;
     @Column (name = "create_at")

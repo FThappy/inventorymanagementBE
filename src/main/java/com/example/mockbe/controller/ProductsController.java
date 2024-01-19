@@ -4,6 +4,7 @@ import com.example.mockbe.dto.*;
 import com.example.mockbe.model.distributor.Distributor;
 import com.example.mockbe.model.product.Image;
 import com.example.mockbe.model.product.Product;
+import com.example.mockbe.model.transcation.Transcation;
 import com.example.mockbe.service.CloudinaryService;
 import com.example.mockbe.service.distributor.DistributorService;
 import com.example.mockbe.service.products.ProductsServiceImp;
@@ -243,6 +244,20 @@ public class ProductsController {
         catch (Exception e){
             Responese res = new Responese("Error update distributors", "1");
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
+        }
+    }
+    @PutMapping("/status")
+    public ResponseEntity<?> putStatus(@RequestBody statusDto statusDto){
+        Product product=productsServiceImp.getProductById(statusDto.getId());
+        if(product == null){
+            Responese res = new Responese("Không tồn tại sản phẩm này", "4");
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+        }
+        try {
+            productsServiceImp.browserProduct(statusDto.getId(),statusDto.getStatus(),statusDto.getDescription());
+            return ResponseEntity.status(HttpStatus.OK).body("Thành công");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error get distributors: " + e.getMessage());
         }
     }
 }

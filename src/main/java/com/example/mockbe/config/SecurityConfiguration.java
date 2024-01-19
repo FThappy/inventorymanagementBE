@@ -3,6 +3,7 @@ package com.example.mockbe.config;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.example.mockbe.model.user.Role.ADMIN;
-import static org.springframework.http.HttpMethod.POST;
+import static com.example.mockbe.model.user.Role.*;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -38,21 +39,20 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers(POST,"/api/distributor").permitAll()
-//                                .requestMatchers(GET,"/store").permitAll()
-//                                .requestMatchers(GET,"/category").permitAll()
-//                                .requestMatchers("/admin/products").hasAnyRole(ADMIN.name(), MANAGER.name())
-//                                .requestMatchers(POST, "/admin/products").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-//                                .requestMatchers(PUT, "/admin/products/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-//                                .requestMatchers(DELETE,"/admin/products/**").hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
-//                                .requestMatchers("/store").hasAnyRole(ADMIN.name(), MANAGER.name())
-//                                .requestMatchers(POST, "/store").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-//                                .requestMatchers(PUT, "/store/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-//                                .requestMatchers(DELETE,"/store/**").hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
-//                                .requestMatchers("/category").hasAnyRole(ADMIN.name(), MANAGER.name())
-//                                .requestMatchers(POST, "/category").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-//                                .requestMatchers(PUT, "/category/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-//                                .requestMatchers(DELETE,"/category/**").hasAnyAuthority(ADMIN_DELETE.name(),MANAGER_DELETE.name())
+                                .requestMatchers(POST,"/api/distributor/**").hasAnyAuthority("ROLE_ADMIN","ROLE_COORDINATOR")
+                                .requestMatchers(GET,"/api/distributor/**").hasAnyAuthority("ROLE_ADMIN","ROLE_COORDINATOR", "ROLE_EMPLOYEESTOCK")
+                                .requestMatchers(DELETE,"/api/distributor/**").hasAnyAuthority("ROLE_ADMIN","ROLE_COORDINATOR")
+                                .requestMatchers(PUT,"/api/distributor/**").hasAnyAuthority("ROLE_ADMIN","ROLE_COORDINATOR")
+                                .requestMatchers(POST,"/api/products/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_EMPLOYEESTOCK")
+                                .requestMatchers(GET,"/api/products/**").hasAnyAuthority("ROLE_ADMIN","ROLE_EMPLOYEESTOCK","ROLE_COORDINATOR")
+                                .requestMatchers(DELETE,"/api/products/**").hasAnyAuthority("ROLE_ADMIN","ROLE_EMPLOYEESTOCK")
+                                .requestMatchers(PUT,"/api/products/**").hasAnyAuthority("ROLE_ADMIN","ROLE_EMPLOYEESTOCK")
+                                .requestMatchers(POST,"/api/transcation/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_COORDINATOR")
+                                .requestMatchers(GET,"/api/transcation/**").hasAnyAuthority("ROLE_ADMIN","ROLE_EMPLOYEESTOCK","ROLE_COORDINATOR")
+                                .requestMatchers(DELETE,"/api/transcation/**").hasAnyAuthority("ROLE_ADMIN","ROLE_COORDINATOR")
+                                .requestMatchers(PUT,"/api/transcation/**").hasAnyAuthority("ROLE_ADMIN","ROLE_COORDINATOR")
+
+
                                 .anyRequest()
                         .authenticated()
                 )

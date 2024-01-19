@@ -33,6 +33,7 @@ public class DistributorServiceImp implements DistributorService {
             newDistributor.setDistributorCode(distributor.getDistributorCode());
             newDistributor.setPayment(distributor.getPayment());
             newDistributor.setDescription(distributor.getDescription());
+            newDistributor.setPaymentCard(distributor.getPaymentCard());
             newDistributor.setWeb(distributor.getWeb());
             newDistributor.setCreateAt(distributor.getCreateAt());
             newDistributor.setUpdateAt(distributor.getUpdateAt());
@@ -72,6 +73,7 @@ public class DistributorServiceImp implements DistributorService {
             oldDistributor.setDistributorCode(distributor.getDistributorCode());
             oldDistributor.setPhone(distributor.getPhone());
             oldDistributor.setEmail(distributor.getEmail());
+            oldDistributor.setPaymentCard(distributor.getPaymentCard());
             oldDistributor.setName(distributor.getName());
             newDistributor = distributorRepository.save(oldDistributor);
             ResDistributor resDistributor = new ResDistributor("0",newDistributor);

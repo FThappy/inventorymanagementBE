@@ -4,15 +4,19 @@ import com.example.mockbe.dto.IdList;
 import com.example.mockbe.dto.ResDistributor;
 import com.example.mockbe.dto.Responese;
 import com.example.mockbe.model.distributor.Distributor;
+import com.example.mockbe.model.user.Role;
 import com.example.mockbe.service.distributor.DistributorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -25,10 +29,24 @@ public class DistributorController {
     private static final String EMAIL_PATTERN = "^[\\w\\.-]+@[\\w\\.-]+\\.\\w+$";
     private static final String PHONE_PATTERN = "^0\\d{9,10}$";
 
+    private static final String BANK_CARD_PATTERN = "^[0-9]{16}$";
+
+
 
     @PostMapping("/")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+
     // tạo nhà cung cấp
     public ResponseEntity<?> addCategory(@RequestBody Distributor distributor){
+
+
+        if(distributor.getPaymentCard() != null){
+            if(!distributor.getPaymentCard().matches(BANK_CARD_PATTERN)){
+                Responese res = new Responese("Số tài khoản bạn nhập sai", "2");
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+            }
+        }
+
         if(!distributor.getEmail().matches(EMAIL_PATTERN)){
             Responese res = new Responese("Mail bạn nhập sai", "2");
             return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
@@ -100,6 +118,21 @@ public class DistributorController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDistibutor (@PathVariable("id") String id,@RequestBody Distributor distributor){
         int idNumber = Integer.parseInt(id);
+        if(distributor.getPaymentCard() != null){
+            if(!distributor.getPaymentCard().matches(BANK_CARD_PATTERN)){
+                Responese res = new Responese("Số tài khoản bạn nhập sai", "2");
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+            }
+        }
+
+        if(!distributor.getEmail().matches(EMAIL_PATTERN)){
+            Responese res = new Responese("Mail bạn nhập sai", "2");
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
+        if(!distributor.getPhone().matches(PHONE_PATTERN)){
+            Responese res = new Responese("Số điện thoại bạn nhập sai", "2");
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
+        }
         try {
             ResDistributor distributors=distributorService.updateDistributor(distributor,idNumber);
             if(distributors == null){
