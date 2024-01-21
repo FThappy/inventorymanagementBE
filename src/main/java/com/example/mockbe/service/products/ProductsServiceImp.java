@@ -7,8 +7,10 @@ import com.example.mockbe.model.distributor.Distributor;
 import com.example.mockbe.model.product.Image;
 import com.example.mockbe.model.product.Product;
 import com.example.mockbe.model.product.Statuss;
+
 import com.example.mockbe.model.transcation.Statusss;
 import com.example.mockbe.model.transcation.Transcation;
+
 import com.example.mockbe.repository.DistributorRepository;
 import com.example.mockbe.repository.ImageProductRepository;
 import com.example.mockbe.repository.ProductsRepository;
@@ -145,6 +147,8 @@ public class ProductsServiceImp implements ProductsService {
             Double costDouble = Double.parseDouble(costString);
             newProduct.setCost(costDouble);
             newProduct.setDistributor(product.getDistributor_code());
+
+            newProduct.setCreatedAt(LocalDateTime.now());
             newProduct.setUpdatedAt(LocalDateTime.now());
             String quantityStringSold = product.getQuantitySold();
             Integer soldInteger = Integer.parseInt(quantityStringSold);
@@ -168,4 +172,6 @@ public class ProductsServiceImp implements ProductsService {
         return "thành công";
     }
 }
+
+
 

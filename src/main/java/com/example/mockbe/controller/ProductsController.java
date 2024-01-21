@@ -4,7 +4,9 @@ import com.example.mockbe.dto.*;
 import com.example.mockbe.model.distributor.Distributor;
 import com.example.mockbe.model.product.Image;
 import com.example.mockbe.model.product.Product;
+
 import com.example.mockbe.model.transcation.Transcation;
+
 import com.example.mockbe.service.CloudinaryService;
 import com.example.mockbe.service.distributor.DistributorService;
 import com.example.mockbe.service.products.ProductsServiceImp;
@@ -188,7 +190,7 @@ public class ProductsController {
                 List<MultipartFile> multipartFiles = product.getImageFiles();
 
                 if (multipartFiles != null && !multipartFiles.isEmpty()) {
-                    productsServiceImp.deleteProductImage(code);
+                    productsServiceImp. deleteProductImage(code);
                     for (MultipartFile multipartFile : multipartFiles) {
                         BufferedImage bi = ImageIO.read(multipartFile.getInputStream());
                         if (bi == null) {
@@ -246,6 +248,7 @@ public class ProductsController {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
         }
     }
+
     @PutMapping("/status")
     public ResponseEntity<?> putStatus(@RequestBody statusDto statusDto){
         Product product=productsServiceImp.getProductById(statusDto.getId());
@@ -260,4 +263,5 @@ public class ProductsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error get distributors: " + e.getMessage());
         }
     }
+
 }

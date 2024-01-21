@@ -5,6 +5,8 @@ import com.example.mockbe.model.distributor.Distributor;
 import com.example.mockbe.model.product.Product;
 import com.example.mockbe.model.transcation.DetailTranscation;
 import com.example.mockbe.model.transcation.Transcation;
+import com.example.mockbe.service.MailService;
+import com.example.mockbe.service.distributor.DistributorServiceImp;
 import com.example.mockbe.service.products.ProductsServiceImp;
 import com.example.mockbe.service.transcation.TranscationServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,20 @@ public class TranscationController {
     TranscationServiceImp transcationServiceImp;
     @Autowired
     ProductsServiceImp productsServiceImp;
+    @Autowired
+    DistributorServiceImp distributorServiceImp;
+    @Autowired
+    private MailService mailService;
+
+
     // tạo đơn hàng
     @PostMapping("/")
     public ResponseEntity<?> addTranscation(@RequestBody TranscationDto transcation){
         try {
             String newTrans = transcationServiceImp.createTranscation(transcation);
+            Distributor distributor = distributorServiceImp.getDistributorByCode(transcation.getDistributorCode());
+            mailService.sendCreateTrans( distributor.getEmail(),transcation );
+
             return ResponseEntity.status(HttpStatus.OK).body("Thành công");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error post category: " + e.getMessage());
@@ -150,6 +161,8 @@ public class TranscationController {
         }
         try {
             transcationServiceImp.browserTrans(statusDto.getId(),statusDto.getStatus(),statusDto.getDescription());
+            Distributor distributor = distributorServiceImp.getDistributorByCode(transcation.getDistributorCode());
+            mailService.sendStatus( distributor.getEmail(),transcation.getTranscationId(),statusDto.getStatus(),statusDto.getDescription() );
             return ResponseEntity.status(HttpStatus.OK).body("Thành công");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error get distributors: " + e.getMessage());
